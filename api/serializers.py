@@ -123,16 +123,16 @@ class DoctorSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 class DoctorListSerializer(serializers.ModelSerializer):
-    """Lightweight serializer for listing doctors (e.g., on find doctors page)."""
     name = serializers.SerializerMethodField()
     specialization_name = serializers.CharField(source='specialization.name', read_only=True)
     rating_display = serializers.SerializerMethodField()
+    profile_picture = serializers.SerializerMethodField()  # <-- add this
 
     class Meta:
         model = Doctor
         fields = [
             'id', 'name', 'specialization_name', 'experience_years', 'consultation_fee',
-            'rating', 'total_reviews', 'rating_display', 'is_available'
+            'rating', 'total_reviews', 'rating_display', 'is_available', 'profile_picture'
         ]
 
     def get_name(self, obj):
@@ -140,6 +140,11 @@ class DoctorListSerializer(serializers.ModelSerializer):
 
     def get_rating_display(self, obj):
         return f"{obj.rating:.1f}" if obj.rating else "New"
+
+    def get_profile_picture(self, obj):
+        if obj.user.profile_picture:
+            return obj.user.profile_picture.url
+        return None
 
 # ------------------- Appointments Serializers -------------------
 

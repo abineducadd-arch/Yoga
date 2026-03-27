@@ -4,6 +4,9 @@ from accounts.models import User
 class Specialization(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+    
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -18,6 +21,9 @@ class Doctor(models.Model):
     rating = models.FloatField(default=0.0)
     total_reviews = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['id']  # or ['-rating'], but 'id' is simplest
 
     def __str__(self):
         return f"Dr. {self.user.get_full_name()}"

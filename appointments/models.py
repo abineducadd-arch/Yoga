@@ -16,6 +16,9 @@ class Appointment(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.patient} - {self.doctor} on {self.date} {self.time}"
